@@ -1,3 +1,2 @@
-set title 'orbit1'
 set grid
-plot 'orbit1.plt' w l lw 2
+plot 'orbit1.plt' w p pt 157 ps 1.2

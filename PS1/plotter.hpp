@@ -23,10 +23,12 @@ namespace Plotter {
 
         f.close();
         
-        string cmd_filename = title + ".p";
+        string cmd_filename = title;
         f.open(cmd_filename, std::ios::out);
 
-        f << "plot '" << data_filename << "' w p" << endl;
+        f << "set grid" << endl;
+        f << "unset key" << endl;
+        f << "plot '" << data_filename << "' w p pt 157 ps 1" << endl;
         
         std::cout << "Created command file " << cmd_filename << endl;
 
@@ -51,12 +53,12 @@ namespace Plotter {
 
         f.close();
         
-        string cmd_filename = title + ".p";
+        string cmd_filename = title;
         f.open(cmd_filename, std::ios::out);
-        f << "set title '" << title << "'" << endl;
         f << "set grid" << endl;
-
-        f << "plot '" << data_filename << "' w l lw 2" << endl;
+        f << "unset key" << endl;
+        f << "plot '" << data_filename << "' w p pt 157 ps 1" << endl;
+        
 
         f.close();
         

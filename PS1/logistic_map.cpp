@@ -1,5 +1,6 @@
 #include "logistic_map.h"
 #include "plotter.hpp"
+#include <algorithm>
 
 void logisticMap(VD &xvals, double R, double x0, int max_iter); 
 
@@ -33,13 +34,21 @@ int main(int argc, char* argv[]) {
     } 
     */
 
-    VD plusOneT = xvals;
-    plusOneT.erase(plusOneT.begin());
-    double new_val = xvals.back() * R * (1 - xvals.back());
-    plusOneT.push_back(new_val);
+    double last = xvals.back();
+    double extend = last * R * (1 - R);
+    double extend2 = extend * R * (1 - R);
 
-    Plotter::discretePlot(tvals, xvals, "logmap");
-    Plotter::contPlot(xvals, plusOneT, "orbit1");
+    VD plusOneT = xvals;
+    std::rotate(plusOneT.begin(), plusOneT.begin() + 1, plusOneT.end());
+    plusOneT.back() = extend;
+
+    VD plusTwoT = plusOneT;
+    std::rotate(plusTwoT.begin(), plusTwoT.begin() + 1, plusTwoT.end());
+    plusTwoT.back() = extend2;
+
+    Plotter::discretePlot(tvals, xvals, "lmap");
+    Plotter::contPlot(xvals, plusOneT, "o1");
+    Plotter::contPlot(xvals, plusTwoT, "o2");
 
     return 0;
 }
