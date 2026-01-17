@@ -33,7 +33,13 @@ int main(int argc, char* argv[]) {
     } 
     */
 
-    Plotter::plot(tvals, xvals, "logmap");
+    VD plusOneT = xvals;
+    plusOneT.erase(plusOneT.begin());
+    double new_val = xvals.back() * R * (1 - xvals.back());
+    plusOneT.push_back(new_val);
+
+    Plotter::discretePlot(tvals, xvals, "logmap");
+    Plotter::contPlot(xvals, plusOneT, "orbit1");
 
     return 0;
 }
