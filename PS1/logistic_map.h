@@ -18,4 +18,6 @@ typedef vector<int> VI;
 
 /* Print the contents of a vector in five-column format. */
 
+void logisticMap(VD &xvals, double R, double x0, int max_iter); 
+
 void printVec(VD &vec);

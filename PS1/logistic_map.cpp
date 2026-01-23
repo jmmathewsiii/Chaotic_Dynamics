@@ -2,8 +2,6 @@
 #include "plotter.hpp"
 #include <algorithm>
 
-void logisticMap(VD &xvals, double R, double x0, int max_iter); 
-
 int main(int argc, char* argv[]) {
 
     if (argc != 4) {
