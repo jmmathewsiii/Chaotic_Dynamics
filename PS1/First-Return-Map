@@ -1,0 +1,6 @@
+set grid
+set xrange [-0.1:1.1]
+set yrange [-0.1:1.1]
+set title 'First-Return-Map'
+unset key
+plot 'First-Return-Map.plt' w p pt 157 ps 1

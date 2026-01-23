@@ -8,7 +8,7 @@ namespace Plotter {
     void discretePlot(const VI &t, const VD &x, const std::string &title = "Plot") {
 
         if (t.size() != x.size()) {
-            std::cerr << "Error: Vectors must be the same size." << std::endl;
+            std::cerr << "Error: Vectors must be the same size.\n";
             return;
         }
 
@@ -26,11 +26,13 @@ namespace Plotter {
         string cmd_filename = title;
         f.open(cmd_filename, std::ios::out);
 
-        f << "set grid" << endl;
-        f << "unset key" << endl;
-        f << "plot '" << data_filename << "' w p pt 157 ps 1" << endl;
+        f << "set grid\n";
+        f << "set yrange [-0.1:1.1]\n";
+        f << "set title '" << title << "'\n";
+        f << "unset key\n";
+        f << "plot '" << data_filename << "' w p pt 157 ps 1\n";
         
-        std::cout << "Created command file " << cmd_filename << endl;
+        std::cout << "Created command file " << cmd_filename << "\n";
 
         f.close();
     }
@@ -56,6 +58,9 @@ namespace Plotter {
         string cmd_filename = title;
         f.open(cmd_filename, std::ios::out);
         f << "set grid" << endl;
+        f << "set xrange [-0.1:1.1]\n";
+        f << "set yrange [-0.1:1.1]\n";
+        f << "set title '" << title << "'\n";
         f << "unset key" << endl;
         f << "plot '" << data_filename << "' w p pt 157 ps 1" << endl;
         

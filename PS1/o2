@@ -1,3 +1,0 @@
-set grid
-unset key
-plot 'o2.plt' w p pt 157 ps 1

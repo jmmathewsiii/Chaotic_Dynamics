@@ -25,18 +25,10 @@ int main(int argc, char* argv[]) {
     
     logisticMap(xvals, R, x0, max_iter); 
 
-    /*
-    for (int i = 0; i < max_iter; i++) {
-        std::cout << xvals[i] << " ";
-        if (i % 5 == 4) {
-            std::cout << std::endl;
-        }
-    } 
-    */
 
     double last = xvals.back();
-    double extend = last * R * (1 - R);
-    double extend2 = extend * R * (1 - R);
+    double extend = last * R * (1 - last);
+    double extend2 = extend * R * (1 - extend);
 
     VD plusOneT = xvals;
     std::rotate(plusOneT.begin(), plusOneT.begin() + 1, plusOneT.end());
@@ -46,9 +38,10 @@ int main(int argc, char* argv[]) {
     std::rotate(plusTwoT.begin(), plusTwoT.begin() + 1, plusTwoT.end());
     plusTwoT.back() = extend2;
 
-    Plotter::discretePlot(tvals, xvals, "lmap");
-    Plotter::contPlot(xvals, plusOneT, "o1");
-    Plotter::contPlot(xvals, plusTwoT, "o2");
+
+    Plotter::discretePlot(tvals, xvals, "Time-Domain");
+    Plotter::contPlot(xvals, plusOneT, "First-Return-Map");
+    Plotter::contPlot(xvals, plusTwoT, "Second-Return-Map");
 
     return 0;
 }
@@ -64,3 +57,12 @@ void logisticMap(VD &xvals, double R, double x0, int max_iter) {
     }
 }
 
+void printVec(VD &vec) {
+    int size = vec.size();
+    for (int i = 0; i < size; i++) {
+        cout << vec[i] << " ";
+        if (i % 5 == 4) {
+            cout << "\n";
+        }
+    }
+}

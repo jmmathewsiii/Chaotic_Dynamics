@@ -1,0 +1,5 @@
+set grid
+set yrange [-0.1:1.1]
+set title 'Time-Domain'
+unset key
+plot 'Time-Domain.plt' w p pt 157 ps 1
