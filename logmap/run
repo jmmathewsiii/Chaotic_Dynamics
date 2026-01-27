@@ -1,0 +1,14 @@
+#!/bin/bash
+
+rm *.plt
+
+pkill -x gnuplot
+
+make
+
+./lm 2. 4. 0.001 0.62 1050 1000
+
+#gnuplot -e "load 'Bifurcation'; pause mouse close"
+#gnuplot -e "load 'Time-Domain'; pause mouse close"
+#gnuplot -e "load 'First-Return-Map'; pause mouse close"
+#mnuplot -e "load 'Second-Return-Map'; pause mouse close"
