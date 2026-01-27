@@ -103,7 +103,7 @@ namespace Plotter {
         f << "set yrange [-0.1:1.1]\n";
         f << "set title '" << title << "'\n";
         f << "unset key" << endl;
-        f << "plot '" << data_filename << "' w p pt 157 ps 0.02" << endl;
+        f << "plot '" << data_filename << "' w p pt 157 ps 0.2" << endl;
 
         f.close();
         
