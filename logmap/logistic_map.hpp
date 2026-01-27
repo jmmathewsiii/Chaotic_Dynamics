@@ -29,7 +29,9 @@ void HenonMap(VD &xvals, VD &yvals, double a, double b, double x0, double y0, in
 
 /* Update a matrix of doubles representing the logistic map results for each R value
  * bifurcation_data[i][j] returns the jth iterate at the ith R value */
-void getBifurcationData(VDD &bifurcation_data, VD &Rvals, double x0, int start_iter, int max_iter);
+void getLogmapBifurcationData(VDD &bifurcation_data, VD &Rvals, double x0, int start_iter, int max_iter);
+
+void getHenonBifurcationData(VDD &bifurcation_data, VD &yvals, VD &Avals, double x0, double y0, double b, int start_iter, int max_iter);
 
 inline VD extendVec(VD xvals, double R) { 
     double last = xvals.back();

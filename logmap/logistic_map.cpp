@@ -12,14 +12,14 @@ int main(int argc, char* argv[]) {
     double R_max   = std::stod(argv[2]);
     double R_diff  = std::stod(argv[3]);
     double x0      = std::stod(argv[4]);
-    int max_iter   = std::stoi(argv[5]);
-    int start_iter = std::stoi(argv[6]);
+    int start_iter = std::stoi(argv[5]);
+    int max_iter   = std::stoi(argv[6]);
 
     int total_iters = max_iter - start_iter;
     VI tvals(total_iters);
     for (int i = 0; i < total_iters; ++i) tvals[i] = i;
 
-    double Rvals_size = (R_max - R_min) / R_diff;
+    int Rvals_size = static_cast<int>((R_max - R_min) / R_diff) + 1;
     VD Rvals(Rvals_size);
     for (int i = 0; i < Rvals_size; ++i) {
         Rvals[i] = R_min + (i * R_diff);
@@ -37,10 +37,13 @@ int main(int argc, char* argv[]) {
 
 
     VDD bifurcation_data(Rvals_size, VD(total_iters));
-    
-    getBifurcationData(bifurcation_data, Rvals, x0, start_iter, max_iter);
+    VD yvals(total_iters);
 
-    Plotter::bifurcationPlot(Rvals, bifurcation_data, "Bifurcation");
+    getHenonBifurcationData(bifurcation_data, yvals, Rvals, x0, 0.5, 0.3, start_iter, max_iter);
+
+//    getLogmapBifurcationData(bifurcation_data, Rvals, x0, start_iter, max_iter);
+
+    Plotter::bifurcationPlot(Rvals, bifurcation_data, "Henon");
 
 
 
@@ -60,12 +63,20 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void getBifurcationData(VDD &bifurcation_data, VD &Rvals, double x0, int start_iter, int max_iter) {
+void getLogmapBifurcationData(VDD &bifurcation_data, VD &Rvals, double x0, int start_iter, int max_iter) {
     int rvals_size = Rvals.size();
 
     for (int i = 0; i < rvals_size; ++i) {
         double R = Rvals[i];
         logisticMap(bifurcation_data[i], R, x0, start_iter, max_iter);
+    }
+}
+
+void getHenonBifurcationData(VDD &bifurcation_data, VD &yvals, VD &Avals, double x0, double y0, double b, int start_iter, int max_iter) {
+    int avals_size = Avals.size();
+    for (int i = 0; i < avals_size; ++i) {
+        double a = Avals[i];
+        HenonMap(bifurcation_data[i], yvals, a, b, x0, y0, start_iter, max_iter);
     }
 }
 
@@ -83,6 +94,8 @@ void logisticMap(VD &xvals, double R, double x0, int start_iter, int max_iter) {
         x = R * x * (1 - x);
     }
 }
+
+/* Henon Map */ 
 
 void HenonMap(VD &xvals, VD &yvals, double a, double b, double x0, double y0, int start_iter, int max_iter) {
 
@@ -107,3 +120,4 @@ void HenonMap(VD &xvals, VD &yvals, double a, double b, double x0, double y0, in
         x_old = x;
     }
 }
+

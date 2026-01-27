@@ -2,11 +2,11 @@
 
 rm *.plt
 
-pkill -x gnuplot
+# pkill -x gnuplot
 
 make
 
-./lm 2. 4. 0.001 0.62 1050 1000
+./lm 0. 1.4 0.0001 0.62 10000 10050
 
 #gnuplot -e "load 'Bifurcation'; pause mouse close"
 #gnuplot -e "load 'Time-Domain'; pause mouse close"
