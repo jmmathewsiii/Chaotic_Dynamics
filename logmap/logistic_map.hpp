@@ -2,12 +2,9 @@
 #define LOGISTIC_MAP
 
 #include <iostream>
-#include <iomanip>
-#include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <cstdlib>
 #include <algorithm>
 
 using std::string;
