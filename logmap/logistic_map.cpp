@@ -120,4 +120,3 @@ void HenonMap(VD &xvals, VD &yvals, double a, double b, double x0, double y0, in
         x_old = x;
     }
 }
-
