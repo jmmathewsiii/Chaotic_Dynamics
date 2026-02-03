@@ -1,0 +1,3 @@
+set grid
+set title 'Tree'
+plot 'Tree.plt' w l
