@@ -13,44 +13,37 @@ int main()
 
 }
 
-void fractal(VD &data, double x0, double y0, double len, int iter, double p)
+void fractal(VD &data, char prev_dir, double x0, double y0, double l_angle, double r_angle, double llen, double rlen, double lp, double rp, int iter)
 {
     // Even indices contain x values. The following odd indices contain the corresponding y values in the
     // (x, y) pairing.
     
-    if (iter >= MAX_ITER) {return;}
+    double l_vec[2]; 
+    double r_vec[2];
 
-    switch (iter % 2) {
-        case 1: {
-            double xl = x0 - len;
-            double xr = x0 + len;
-
-            data.push_back(x0); data.push_back(y0);
-            data.push_back(xl); data.push_back(y0);
-
-            data.push_back(x0); data.push_back(y0);
-            data.push_back(xr); data.push_back(y0);
-
-            fractal(data, xl, y0, len * p, iter + 1);
-            fractal(data, xr, y0, len * p, iter + 1);
-
-            break;
+    switch (prev_dir) {
+        case 'n':
+        {
+            l_vec[0] = -llen; l_vec[1] = 0;
+            r_vec[0] =  rlen; r_vec[1] = 0;
         }
-        case 0: {
-            double yl = y0 - len;
-            double yr = y0 + len;
-
-            data.push_back(x0); data.push_back(y0);
-            data.push_back(x0); data.push_back(yl);
-
-            data.push_back(x0); data.push_back(y0);
-            data.push_back(x0); data.push_back(yr);
-
-            fractal(data, x0, yl, len * p, iter + 1);
-            fractal(data, x0, yr, len * p, iter + 1);
-
-            break;
+        case 'e':
+        {
+            l_vec[0] = 0; l_vec[1] =  llen;
+            r_vec[0] = 0; r_vec[1] = -rlen;
         }
+        case 's':
+        {
+            l_vec[0] =  llen; l_vec[1] = 0;
+            r_vec[0] = -rlen; r_vec[1] = 0;
+        }
+        case 'w':
+        {
+            l_vec[0] = 0; l_vec[1] = -llen;
+            r_vec[0] = 0; r_vec[1] =  rlen;
+        }
+        default:
+            std::cerr << "Invalid previous direction: " << prev_dir << "\n";
     }
-    return;
+
 }
