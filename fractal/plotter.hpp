@@ -27,9 +27,10 @@ namespace Plotter {
         
         string cmd_filename = title;
         f.open(cmd_filename, std::ios::out);
-        f << "set grid" << endl;
+        f << "set grid\n";
         f << "set title '" << title << "'\n";
-        f << "plot '" << data_filename << "' w l" << endl;
+        f << "unset key\n";
+        f << "plot '" << data_filename << "' w l\n";
         
 
         f.close();

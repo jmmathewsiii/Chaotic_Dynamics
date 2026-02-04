@@ -1,3 +1,4 @@
 set grid
 set title 'Tree'
+unset key
 plot 'Tree.plt' w l

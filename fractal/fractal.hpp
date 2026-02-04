@@ -7,18 +7,21 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 using std::string;
 using std::vector;
 using std::stringstream;
 using std::cout;
 using std::endl;
+using std::sin;
+using std::cos;
 
 typedef vector<double> VD;
 typedef vector<int> VI;
 typedef vector<vector<double>> VDD;
 
-void fractal(VD &data, char prev_dir, double x0, double y0, double l_angle, double r_angle, double llen=0.6, double rlen=0.6, double l_ratio=0.6, double r_ratio = 0.6, int iter=1);
+void fractal(VD &data, char prev_dir, double x0, double y0, double l_angle=0, double r_angle=0, double llen=0.6, double rlen=0.6, double l_ratio=0.6, double r_ratio = 0.6, int iter=1);
 
 inline VD extendVec(VD xvals, double R) { 
     double last = xvals.back();
