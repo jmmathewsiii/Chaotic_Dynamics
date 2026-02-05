@@ -1,7 +1,7 @@
 #include "fractal.hpp"
 #include "plotter.hpp"
 
-const int MAX_ITER = 15;
+const int MAX_ITER = 4;
 const double PI = 3.1415926535898;
 
 int main()
@@ -76,16 +76,20 @@ void fractal(VD &data, char prev_dir, double x0, double y0, double l_angle, doub
     if (l_angle) {
         double l_sin = sin(l_angle); 
         double l_cos = cos(l_angle); 
+        double lx = l_vec[0];
+        double ly = l_vec[1];
 
-        l_vec[0] = l_cos * l_vec[0] - l_sin * l_vec[1];
-        l_vec[1] = l_sin * l_vec[0] + l_cos * l_vec[1];
+        l_vec[0] = l_cos * lx - l_sin * ly;
+        l_vec[1] = l_sin * lx + l_cos * ly;
     }
     if (r_angle) {
         double r_sin = sin(r_angle);
         double r_cos = cos(r_angle);
+        double rx = r_vec[0];
+        double ry = r_vec[1];
 
-        r_vec[0] = r_cos * r_vec[0] - r_sin * r_vec[1];
-        r_vec[1] = r_sin * r_vec[0] + r_cos * r_vec[1];
+        r_vec[0] = r_cos * rx - r_sin * ry;
+        r_vec[1] = r_sin * rx + r_cos * ry;
     }
     
     l_vec[0] += x0; r_vec[0] += x0;
