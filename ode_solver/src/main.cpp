@@ -35,7 +35,6 @@ int main(int argc, char* argv[])
     history.reserve(n_iter);
     history.push_back(curr_state);
 
-    double t = t0;
     double t_new = t0 + dt;
 
     for (int i = 1; i < n_iter; ++i) {
@@ -43,5 +42,8 @@ int main(int argc, char* argv[])
         new_state = rk4_step(curr_state, dt, pend);
         history.push_back(new_state);
     }
+
+    std::string pltname = "TS Plot";
+    Plotter::plot_time_series(history, pltname);
 
 }

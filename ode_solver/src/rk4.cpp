@@ -2,7 +2,6 @@
 
 State rk4_step(State &curr_state, double dt, DerivativeFunc f)
 {
-    std::size_t state_size = curr_state.getSize();
 
     double half_step = dt * 0.5;
     double sixth_step = dt / 6;
