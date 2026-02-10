@@ -21,3 +21,9 @@ int main(int argc, char* argv[])
     double al = std::stod(argv[9]);
 
 }
+
+void RK4()
+{
+    
+}
+
