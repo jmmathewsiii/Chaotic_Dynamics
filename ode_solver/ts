@@ -1,0 +1,3 @@
+set title 'ts'
+unset key
+plot 'ts.plt' w l

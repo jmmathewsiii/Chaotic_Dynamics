@@ -9,7 +9,9 @@
 namespace Plotter {
     void plot_time_series(std::vector<State>&, std::string&);
     void plot_2D_state_space(std::vector<State>&, std::string&);
+    void plot_multiple_2D_state_spaces(std::vector<std::vector<State>>&, std::string&);
     void plot_3D_state_space(std::vector<State>&, std::string&);
+    void plot_multiple_3D_state_spaces(std::vector<std::vector<State>>&, std::string&);
 }
 
 #endif // !PLOTTER

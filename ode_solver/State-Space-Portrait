@@ -1,0 +1,3 @@
+set title 'State-Space-Portrait'
+unset key
+plot 'State-Space-Portrait.plt' w l
