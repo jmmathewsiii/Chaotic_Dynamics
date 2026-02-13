@@ -48,7 +48,7 @@ cleanall: clean
 
 # Run the program (example - modify arguments as needed)
 run: all | $(OUT_DIR)
-	./$(TARGET) 0. 0.0005 1000000 1.6 0.1 0.1 1.517127329 0.25 9.80665 0. 0.
+	./$(TARGET) 0. 0.065 10000 0. 0.1 0.1 0. 0. 9.80665 1.5 0.
 
 # Phony targets
 .PHONY: all clean cleanall run

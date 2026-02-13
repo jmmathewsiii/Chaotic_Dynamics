@@ -49,7 +49,7 @@ void Plotter::plot_2D_state_space(std::vector<State> &states, std::string &name)
     for (int i = 0; i < size; ++i) {
         theta = states[i].x[0];
         theta = std::fmod(theta, 2 * PI);
-        if (std::abs(theta - prev_theta) > 6) {f << "\n";}
+        if (std::abs(theta - prev_theta) > 6.) {f << "\n";}
         f << theta << " " << states[i].x[1] << "\n";
         prev_theta = theta;
     }
