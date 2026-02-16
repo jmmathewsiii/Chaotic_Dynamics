@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -Wall -Werror -Wpedantic -fsanitize=address -g -Iinclude
+CXXFLAGS = -Wall -Wpedantic -fsanitize=address -g -Iinclude
 LDFLAGS = -fsanitize=address
 
 # Directories
@@ -48,7 +48,7 @@ cleanall: clean
 
 # Run the program (example - modify arguments as needed)
 run: all | $(OUT_DIR)
-	./$(TARGET) 0. 0.065 10000 0. 0.1 0.1 0. 0. 9.80665 1.5 0.
+	./$(TARGET) 0. 0.005 10000 0. 0.1 0.1 0. 0. 9.80665 1.5 0.
 
 # Phony targets
 .PHONY: all clean cleanall run

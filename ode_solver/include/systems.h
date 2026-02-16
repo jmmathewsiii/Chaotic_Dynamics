@@ -19,4 +19,17 @@ public:
     State operator()(const State &s, double t) const;
 };
 
+class Lorenz {
+    private:
+        double a;
+        double b;
+        double r;
+    public:
+        Lorenz();
+        Lorenz(double, double, double);
+
+        State operator()(const State &s, double t) const;
+};
+
+
 #endif // !SYSTEMS_H

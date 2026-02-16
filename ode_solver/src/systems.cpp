@@ -30,3 +30,27 @@ State Pendulum::operator()(const State &s, double t) const {
 
     return ds;
 }
+
+Lorenz::Lorenz() {
+    a = 16.;
+    b = 4.;
+    r = 45.;
+}
+
+Lorenz::Lorenz(double a_, double b_, double r_) {
+    a = a_;
+    b = b_;
+    r = r_;
+}
+
+State Lorenz::operator()(const State &s, double t) const {
+    const int state_size = s.getSize();
+
+    State ds(state_size, t);
+
+    ds.x[0] = a * (s.x[1] - s.x[0]);
+    ds.x[1] = (r * s.x[0]) - s.x[1] - (s.x[0] * s.x[2]);
+    ds.x[2] = (s.x[0] * s.x[1]) - (b * s.x[2]);
+
+    return ds;
+}
