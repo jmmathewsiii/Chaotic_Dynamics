@@ -21,65 +21,71 @@ State rk4_step(State &curr_state, double dt, DerivativeFunc f)
     return result;
 }
 
-VS run_one_sim(double t0, double dt, int n_iter, double A, double m, double l, double alpha, double beta, double g, double theta, double omega)
+State rk4_step_adaptive(State &curr_state, double &dt0, DerivativeFunc f, double tol)
 {
-    Pendulum pend(A, m, l, alpha, beta, g);
+    State full_step_result      = rk4_step(curr_state          , dt0      , f);
 
-    State curr_state(2, t0);
-    curr_state.x[0] = theta;
-    curr_state.x[1] = omega;
+    State one_half_step_result  = rk4_step(curr_state          , dt0 * 0.5, f);
+    State two_half_steps_result = rk4_step(one_half_step_result, dt0 * 0.5, f);
 
-    VS history;
-    history.reserve(n_iter);
-    history.push_back(curr_state);
-
-    double t_new = t0 + dt;
-
-    for (int i = 1; i < n_iter; ++i) {
-
-        State new_state(2, t_new);
-        new_state = rk4_step(curr_state, dt, pend);
-        history.push_back(new_state);
-        curr_state = new_state;
+    State shrink_err_state = two_half_steps_result - full_step_result;
+    double shrink_err_norm = shrink_err_state.twoNorm();
+    
+    if (shrink_err_norm > tol) {
+        dt0 *= 0.5;
+        return rk4_step_adaptive_shrinking(curr_state, one_half_step_result, dt0, f, tol);
     }
-    return history;
+    
+    State two_full_steps_result = rk4_step(full_step_result, dt0, f);
+    State one_double_step_result = rk4_step(curr_state, dt0 * 2., f);
+
+    State grow_err_state = two_full_steps_result - one_double_step_result;
+    double grow_err_norm = grow_err_state.twoNorm();
+
+    if (grow_err_norm < tol)
+    {
+        dt0 *= 2.;
+        return rk4_step_adaptive_growing(curr_state, one_double_step_result, dt0, f, tol);
+    }
+
+    return full_step_result;
 }
 
-VSS run_multiple_sims(double t0, double dt, int n_iter, double A, double m, double l, double alpha, double beta, double g, std::vector<double> thetas, std::vector<double> omegas)
+State rk4_step_adaptive_shrinking(State &curr_state, State &cached_state, double &dt, DerivativeFunc f, double tol)
 {
-    Pendulum pend(A, m, l, alpha, beta, g);
+    State full_step_result = cached_state;
 
-    const int N_THETAS = thetas.size();
-    const int N_OMEGAS = omegas.size();
-    const int N_STARTS = N_THETAS * N_OMEGAS;
+    State one_half_step_result  = rk4_step(curr_state          , dt * 0.5, f);
+    State two_half_steps_result = rk4_step(one_half_step_result, dt * 0.5, f);
 
-    VSS histories;
-    histories.reserve(N_STARTS);
-
-    for (int j = 0; j < N_THETAS; ++j) {
-        for (int k = 0; k < N_OMEGAS; ++k) {
-        
-            std::vector<State> history;
-            history.reserve(n_iter);
-
-            State curr_state(2, t0);
-            curr_state.x[0] = thetas[j];
-            curr_state.x[1] = omegas[k];
-
-            history.push_back(curr_state);
-
-            double t_new = t0 + dt;
-
-            for (int i = 1; i < n_iter; ++i) {
-
-                State new_state(2, t_new);
-                new_state = rk4_step(curr_state, dt, pend);
-                history.push_back(new_state);
-                curr_state = new_state;
-            }
-
-            histories.push_back(history);
-        }
+    State shrink_err_state = two_half_steps_result - full_step_result;
+    double shrink_err_norm = shrink_err_state.twoNorm();
+    
+    if (shrink_err_norm > tol) {
+        dt *= 0.5;
+        return rk4_step_adaptive_shrinking(curr_state, one_half_step_result, dt, f, tol);
     }
-    return histories;
+    else {
+        return full_step_result;
+    }
+}
+
+State rk4_step_adaptive_growing(State &curr_state, State &cached_state, double &dt, DerivativeFunc f, double tol)
+{
+    State full_step_result = cached_state;
+    State two_full_steps_result = rk4_step(full_step_result, dt * 2., f);
+
+    State one_double_step_result = rk4_step(curr_state, dt, f);
+
+    State grow_err_state = two_full_steps_result - one_double_step_result;
+    double grow_err_norm = grow_err_state.twoNorm();
+
+    if (grow_err_norm < tol)
+    {
+        dt *= 2.;
+        return rk4_step_adaptive_growing(curr_state, one_double_step_result, dt, f, tol);
+    }
+    else {
+        return full_step_result;
+    }
 }

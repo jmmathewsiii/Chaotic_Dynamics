@@ -124,7 +124,7 @@ void Plotter::plot_3D_state_space(std::vector<State> &states, std::string &name)
     f.open(data_filename.c_str(), std::ios::out);
 
     for (int i = 0; i < size; ++i) {
-        f << states[i].x[0] << " " << states[i].x[1] << states[i].x[2] << "\n";
+        f << states[i].x[0] << " " << states[i].x[1] << " " << states[i].x[2] << "\n";
     }
 
     f.close();

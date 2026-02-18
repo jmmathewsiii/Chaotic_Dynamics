@@ -1,4 +1,0 @@
-set title 'State-Space-Plot' font ', 14'
-set tics font ', 14'
-unset key
-plot 'State-Space-Plot.plt' w l lw 2

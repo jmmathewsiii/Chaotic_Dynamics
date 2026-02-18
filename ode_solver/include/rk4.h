@@ -11,8 +11,8 @@ using DerivativeFunc = std::function<State(const State&, double)>;
 
 State rk4_step(State &curr_state, double dt, DerivativeFunc f);
 
-VS run_one_sim(double t0, double dt, int n_iter, double A, double m, double l, double alpha, double beta, double g, double theta, double omega);
-
-VSS run_multiple_sims(double t0, double dt, int n_iter, double A, double m, double l, double alpha, double beta, double g, std::vector<double> thetas, std::vector<double> omegas);
+State rk4_step_adaptive(State&, double&, DerivativeFunc, double);
+State rk4_step_adaptive_shrinking(State&, State&, double&, DerivativeFunc, double);
+State rk4_step_adaptive_growing(State&, State&, double&, DerivativeFunc, double);
 
 #endif // !RK4_H

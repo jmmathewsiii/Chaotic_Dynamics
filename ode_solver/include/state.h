@@ -12,6 +12,10 @@ class State {
     
     State operator+(const State &other) const;
     State operator*(double scalar) const;
+    State operator-(const State &other) const;
+
+    double infNorm() const;
+    double twoNorm() const;
 
     int getSize() const;
 };

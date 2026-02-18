@@ -1,0 +1,3 @@
+set title 'Lorenz-State-Space-Plot'
+unset key
+splot 'Lorenz-State-Space-Plot.plt' w l

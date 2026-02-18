@@ -1,67 +1,237 @@
-#include "../include/rk4.h"
 #include "../include/plotter.h"
+#include "../include/simulation.h"
 
 
-const int ARGNUM = 12;
+const int    PEND_ARGNUM = 15;
+const int  LORENZ_ARGNUM = 13;
+const int ROSSLER_ARGNUM = 13;
 
-void setThetasAndOmegas(std::vector<double>&, std::vector<double>&);
+VS getStartStates(string, double);
 
 int main(int argc, char* argv[])
 {
-    if (argc != ARGNUM) {
-        std::cerr << "Error: Too few arguments.\nExpected: " 
-                  << ARGNUM << ". Received: " << argc << "\n";
+    if (argc != PEND_ARGNUM && argc != LORENZ_ARGNUM && argc != ROSSLER_ARGNUM) {
+        std::cerr << "Error: Too few arguments.\n" 
+                  << "Expected: " << PEND_ARGNUM << " for pendulum simulation, " << LORENZ_ARGNUM 
+                  << " for Lorenz, or " << ROSSLER_ARGNUM << " for Rossler.\n"
+                  << "Received: " << argc << "\n";
         return -1;
     }
 
-    double    t0 = std::stod(argv[1]);
-    double    dt = std::stod(argv[2]);
-    int   n_iter = std::stoi(argv[3]);
-    double     A = std::stod(argv[4]);
-    double     m = std::stod(argv[5]);
-    double     l = std::stod(argv[6]);
-    double alpha = std::stod(argv[7]);
-    double  beta = std::stod(argv[8]);
-    double     g = std::stod(argv[9]);
-    double theta = std::stod(argv[10]);
-    double omega = std::stod(argv[11]);
+    string system_type = argv[1];
+    string   plot_type = argv[2];
+    string    adaptive = argv[3];
+    double          t0 = std::stod(argv[4]);
+    double          dt = std::stod(argv[5]);
+    int         n_iter = std::stoi(argv[6]);
 
-    std::vector<double> thetas;
-    std::vector<double> omegas;
+    string plot_name;
 
-    thetas.push_back(theta);
-    omegas.push_back(omega);
+    if (system_type == "pendulum" && argc == PEND_ARGNUM)
+    {
+        double     A = std::stod(argv[7]);
+        double     m = std::stod(argv[8]);
+        double     l = std::stod(argv[9]);
+        double alpha = std::stod(argv[10]);
+        double  beta = std::stod(argv[11]);
+        double     g = std::stod(argv[12]);
+        double theta = std::stod(argv[13]);
+        double omega = std::stod(argv[14]);
 
-    setThetasAndOmegas(thetas, omegas);
+        Pendulum pend(A, m, l, alpha, beta, g);
 
-    //VSS histories = run_multiple_sims(t0, dt, n_iter, A, m, l, alpha, beta, g, thetas, omegas);
-    VS history = run_one_sim(t0, dt, n_iter, A, m, l, alpha, beta, g, theta, omega);
+        State start_state(2, t0);
+        start_state.x[0] = theta;
+        start_state.x[1] = omega;
 
-    std::string state_space_name = "State-Space-Plot";
-    std::string portrait_name = "State-Space-Portrait";
+        if (plot_type == "single")
+        {
+            VS history;
+            plot_name = "Pendulum-State-Space-Plot";
 
-    Plotter::plot_2D_state_space(history, state_space_name);
-//    Plotter::plot_multiple_2D_state_spaces(histories, portrait_name);
+            if (adaptive == "fixed") {
+                history = run_one_sim<Pendulum>(start_state, t0, dt, n_iter, pend);
+            }
+            else if (adaptive == "adaptive") {
+                history = run_one_sim_adaptive<Pendulum>(start_state, t0, dt, n_iter, pend);
+            }
+            else {
+                cerr << "Invalid adaptiveness parameter: " << adaptive << "\n";
+            }
+            Plotter::plot_2D_state_space(history, plot_name);
+        }
+        else if (plot_type == "portrait")
+        {
+            VS start_states = getStartStates("pendulum", t0);
+            start_states.push_back(start_state);
+            plot_name = "Pendulum-State-Space-Portrait";
+            VSS histories = run_multiple_sims<Pendulum>(start_states, t0, dt, n_iter, pend);
+            Plotter::plot_multiple_2D_state_spaces(histories, plot_name);
+        }
+        else {
+            cerr << "Invalid plot type: " << plot_type << "\n";
+        }
+    }
+    else if (system_type == "lorenz" && argc == LORENZ_ARGNUM)
+    {
+        double a  = std::stod(argv[7]);
+        double b  = std::stod(argv[8]);
+        double r  = std::stod(argv[9]);
+        double x0 = std::stod(argv[10]);
+        double y0 = std::stod(argv[11]);
+        double z0 = std::stod(argv[12]);
+
+        Lorenz lorenz(a, b, r);
+        State start_state(3, t0);
+        start_state.x[0] = x0;
+        start_state.x[1] = y0;
+        start_state.x[2] = z0;
+
+        if (plot_type == "single")
+        {
+            VS history;
+            plot_name = "Lorenz-State-Space-Plot";
+
+            if (adaptive == "fixed") {
+                history = run_one_sim<Lorenz>(start_state, t0, dt, n_iter, lorenz);
+            }
+            else if (adaptive == "adaptive") {
+                history = run_one_sim_adaptive<Lorenz>(start_state, t0, dt, n_iter, lorenz);
+            }
+            else {
+                cerr << "Invalid adaptiveness parameter: " << adaptive << "\n";
+            }
+            Plotter::plot_3D_state_space(history, plot_name);
+        }
+        else if (plot_type == "portrait")
+        {
+            VS start_states = getStartStates("lorenz", t0);
+            start_states.push_back(start_state);
+            plot_name = "Lorenz-State-Space-Portrait";
+            VSS histories = run_multiple_sims<Lorenz>(start_states, t0, dt, n_iter, lorenz);
+            Plotter::plot_multiple_3D_state_spaces(histories, plot_name);
+        }
+        else {
+            cerr << "Invalid plot type: " << plot_type << "\n";
+        }
+    }
+    else if (system_type == "rossler" && argc == ROSSLER_ARGNUM)
+    {
+        double a  = std::stod(argv[7]);
+        double b  = std::stod(argv[8]);
+        double c  = std::stod(argv[9]);
+        double x0 = std::stod(argv[10]);
+        double y0 = std::stod(argv[11]);
+        double z0 = std::stod(argv[12]);
+
+        Rossler rossler(a, b, c);
+        State start_state(3, t0);
+        start_state.x[0] = x0;
+        start_state.x[1] = y0;
+        start_state.x[2] = z0;
+
+        if (plot_type == "single")
+        {
+            VS history;
+            plot_name = "Rossler-State-Space-Plot";
+
+            if (adaptive == "fixed") {
+                history = run_one_sim<Rossler>(start_state, t0, dt, n_iter, rossler);
+            }
+            else if (adaptive == "adaptive") {
+                history = run_one_sim_adaptive<Rossler>(start_state, t0, dt, n_iter, rossler);
+            }
+            else {
+                cerr << "Invalid adaptiveness parameter: " << adaptive << "\n";
+            }
+            Plotter::plot_3D_state_space(history, plot_name);
+        }
+        else if (plot_type == "portrait")
+        {
+            VS start_states = getStartStates("rossler", t0);
+            start_states.push_back(start_state);
+            plot_name = "Rossler-State-Space-Portrait";
+            VSS histories = run_multiple_sims<Rossler>(start_states, t0, dt, n_iter, rossler);
+            Plotter::plot_multiple_3D_state_spaces(histories, plot_name);
+        }
+        else {
+            cerr << "Invalid plot type: " << plot_type << "\n";
+        }
+
+    }
+    else
+    {
+        cerr << "Invalid system type: " << system_type << "\n";
+    }
 }
 
 
+VS getStartStates(string system_type, double t0)
+{
+    VS start_states;
 
+    if (system_type == "pendulum")
+    {
+        for (int i = -15; i <= 15; ++i) {
+            for (int j = -3; j <= 3; ++j) {
+                State curr_state(2, t0);
+                curr_state.x[0] = PI * i / 5;
+                curr_state.x[1] = j * 0.01;
+                start_states.push_back(curr_state);
+            }
+            State extra_state1(2, t0);
+            State extra_state2(2, t0);
 
-void setThetasAndOmegas(std::vector<double> &thetas, std::vector<double> &omegas) {
+            extra_state1.x[0] = PI * i / 5;
+            extra_state1.x[1] = 20.5;
 
-    for (int i = -15; i <= 15; ++i) {
-        thetas.push_back(PI * i / 5);
+            extra_state2.x[0] = PI * i / 5;
+            extra_state2.x[1] = -20.5;
+
+            start_states.push_back(extra_state1);
+            start_states.push_back(extra_state2);
+        }
+        for (int i = -2; i <= 2; ++i) {
+            for (int j = -3; j <= 3; ++j) {
+                State curr_state1(2, t0);
+                State curr_state2(2, t0);
+                State curr_state3(2, t0);
+                State curr_state4(2, t0);
+
+                curr_state1.x[0] = ((PI * i) - 0.25);
+                curr_state2.x[0] = ((PI * i) + 0.25);
+                curr_state3.x[0] = ((PI * i) - 0.1);
+                curr_state4.x[0] = ((PI * i) + 0.1);
+                curr_state1.x[1] = j * 0.01;
+                curr_state2.x[1] = j * 0.01;
+                curr_state3.x[1] = j * 0.01;
+                curr_state4.x[1] = j * 0.01;
+
+                start_states.push_back(curr_state1);
+                start_states.push_back(curr_state2);
+                start_states.push_back(curr_state3);
+                start_states.push_back(curr_state4);
+            }
+        }
     }
-    for (int i = -2; i < 3; ++i) {
-        thetas.push_back((PI * i) - 0.25);
-        thetas.push_back((PI * i) + 0.25);
-        thetas.push_back((PI * i) - 0.1);
-        thetas.push_back((PI * i) + 0.1);
+    else if (system_type == "lorenz")
+    {
+        State curr_state(3, t0);
+        curr_state.x[0] = 0.;
+        curr_state.x[1] = 0.;
+        curr_state.x[2] = 0.;
+        start_states.push_back(curr_state);
     }
-    for (int i = -3; i < 3; ++i) {
-        omegas.push_back(i * 0.01);
+    else if (system_type == "rossler")
+    {
+        State curr_state(3, t0);
+        curr_state.x[0] = 0.;
+        curr_state.x[1] = 0.;
+        curr_state.x[2] = 0.;
+        start_states.push_back(curr_state);
     }
-    omegas.push_back(20.5);
-    omegas.push_back(-20.5);
-
+    else {
+        cerr << "Invalid system type: " << system_type << "\n";
+    }
+    return start_states;
 }
