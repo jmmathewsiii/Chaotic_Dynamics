@@ -1,3 +1,0 @@
-set title 'Rossler-State-Space-Plot'
-unset key
-splot 'Rossler-State-Space-Plot.plt' w l

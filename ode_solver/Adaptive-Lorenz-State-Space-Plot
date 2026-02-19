@@ -1,3 +1,0 @@
-set title 'Adaptive-Lorenz-State-Space-Plot'
-unset key
-splot 'Adaptive-Lorenz-State-Space-Plot.plt' w l
