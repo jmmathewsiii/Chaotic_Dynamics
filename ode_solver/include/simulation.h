@@ -22,8 +22,7 @@ VS run_one_sim(State &start_state, double t0, double dt, int n_iter, SystemType 
         history.push_back(new_state);
         curr_state = new_state;
     }
-    return history;
-}
+    return history;}
 
 template<typename SystemType>
 VS run_one_sim_adaptive(State &start_state, double t0, double dt, int n_iter, SystemType system)
@@ -40,7 +39,7 @@ VS run_one_sim_adaptive(State &start_state, double t0, double dt, int n_iter, Sy
     for (int i = 1; i < n_iter; ++i) {
 
         State new_state(STATE_SIZE, t_new);
-        new_state = rk4_step_adaptive(curr_state, dt, system, 0.0001); // hard-coded tolerance
+        new_state = rk4_step_adaptive(curr_state, dt, system, 0.6); // hard-coded tolerance
         history.push_back(new_state);
         curr_state = new_state;
     }

@@ -128,6 +128,7 @@ void Plotter::plot_3D_state_space(std::vector<State> &states, std::string &name)
     }
 
     f.close();
+    cout << "Last time: " << states[size - 1].t << "\n";
 
     std::cout << "Data file written: " << data_filename << "\n";
     

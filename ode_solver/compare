@@ -1,0 +1,2 @@
+splot "Adaptive-Lorenz-State-Space-Plot.plt" using 1:2:3 title "Adaptive" with lines, \
+"Nonadaptive-Lorenz-State-Space-Plot.plt" using 1:2:3 title "Nonadaptive" w l

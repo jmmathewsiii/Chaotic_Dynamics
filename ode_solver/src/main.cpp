@@ -1,7 +1,6 @@
 #include "../include/plotter.h"
 #include "../include/simulation.h"
 
-
 const int    PEND_ARGNUM = 15;
 const int  LORENZ_ARGNUM = 13;
 const int ROSSLER_ARGNUM = 13;
@@ -90,13 +89,14 @@ int main(int argc, char* argv[])
         if (plot_type == "single")
         {
             VS history;
-            plot_name = "Lorenz-State-Space-Plot";
 
             if (adaptive == "fixed") {
                 history = run_one_sim<Lorenz>(start_state, t0, dt, n_iter, lorenz);
+                plot_name = "Nonadaptive-Lorenz-State-Space-Plot";
             }
             else if (adaptive == "adaptive") {
                 history = run_one_sim_adaptive<Lorenz>(start_state, t0, dt, n_iter, lorenz);
+                plot_name = "Adaptive-Lorenz-State-Space-Plot";
             }
             else {
                 cerr << "Invalid adaptiveness parameter: " << adaptive << "\n";

@@ -23,6 +23,7 @@ State rk4_step(State &curr_state, double dt, DerivativeFunc f)
 
 State rk4_step_adaptive(State &curr_state, double &dt0, DerivativeFunc f, double tol)
 {
+    cout << "Tol = " << tol << "\n";
     State full_step_result      = rk4_step(curr_state          , dt0      , f);
 
     State one_half_step_result  = rk4_step(curr_state          , dt0 * 0.5, f);
