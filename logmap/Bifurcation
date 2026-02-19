@@ -1,6 +1,0 @@
-set grid
-set xrange [1:5]
-set yrange [-0.1:1.1]
-set title 'Bifurcation'
-unset key
-plot 'Bifurcation.plt' w p pt 157 ps 0.02
