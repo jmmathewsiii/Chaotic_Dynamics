@@ -1,0 +1,4 @@
+set title 'Pendulum-State-Space-Plot' font ', 14'
+set tics font ', 14'
+unset key
+plot 'Pendulum-State-Space-Plot.plt' w p ps 0.75 pt 22 

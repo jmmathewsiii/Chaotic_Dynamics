@@ -1,0 +1,4 @@
+set title 'TS-Plot' font ', 16'
+set tics font ', 16'
+unset key
+plot 'TS-Plot.plt' w l lw 4

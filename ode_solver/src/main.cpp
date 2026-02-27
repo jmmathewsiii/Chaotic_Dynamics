@@ -1,9 +1,10 @@
 #include "../include/plotter.h"
 #include "../include/simulation.h"
+#include "../include/section.h"
 
-const int    PEND_ARGNUM = 15;
-const int  LORENZ_ARGNUM = 13;
-const int ROSSLER_ARGNUM = 13;
+const int    PEND_ARGNUM = 17;
+const int  LORENZ_ARGNUM = 15;
+const int ROSSLER_ARGNUM = 15;
 
 VS getStartStates(string, double);
 
@@ -20,22 +21,24 @@ int main(int argc, char* argv[])
     string system_type = argv[1];
     string   plot_type = argv[2];
     string    adaptive = argv[3];
-    double          t0 = std::stod(argv[4]);
-    double          dt = std::stod(argv[5]);
-    int         n_iter = std::stoi(argv[6]);
+    string     section = argv[4];
+    double          t0 = std::stod(argv[5]);
+    double          dt = std::stod(argv[6]);
+    int         n_iter = std::stoi(argv[7]);
+    double hyp_plane_t = std::stod(argv[8]);
 
     string plot_name;
 
     if (system_type == "pendulum" && argc == PEND_ARGNUM)
     {
-        double     A = std::stod(argv[7]);
-        double     m = std::stod(argv[8]);
-        double     l = std::stod(argv[9]);
-        double alpha = std::stod(argv[10]);
-        double  beta = std::stod(argv[11]);
-        double     g = std::stod(argv[12]);
-        double theta = std::stod(argv[13]);
-        double omega = std::stod(argv[14]);
+        double     A = std::stod(argv[9]);
+        double     m = std::stod(argv[10]);
+        double     l = std::stod(argv[11]);
+        double alpha = std::stod(argv[12]);
+        double  beta = std::stod(argv[13]);
+        double     g = std::stod(argv[14]);
+        double theta = std::stod(argv[15]);
+        double omega = std::stod(argv[16]);
 
         Pendulum pend(A, m, l, alpha, beta, g);
 
@@ -47,6 +50,7 @@ int main(int argc, char* argv[])
         {
             VS history;
             plot_name = "Pendulum-State-Space-Plot";
+            string ts_plot_name = "TS-Plot";
 
             if (adaptive == "fixed") {
                 history = run_one_sim<Pendulum>(start_state, t0, dt, n_iter, pend);
@@ -57,7 +61,18 @@ int main(int argc, char* argv[])
             else {
                 cerr << "Invalid adaptiveness parameter: " << adaptive << "\n";
             }
-            Plotter::plot_2D_state_space(history, plot_name);
+
+            if (section == "section") {
+                plot_name = "Pendulum-State-Space-Plot-Section";
+                VS section_points = interpolatedTemporalPoincare(history, hyp_plane_t);
+                Plotter::plot_2D_state_space_section(section_points, plot_name);
+            }
+            else if (section == "full") {
+                Plotter::plot_2D_state_space(history, plot_name);
+            }
+            else {
+                cerr << "Invalid section parameter: " << section << "\n";
+            }
         }
         else if (plot_type == "portrait")
         {
@@ -73,12 +88,12 @@ int main(int argc, char* argv[])
     }
     else if (system_type == "lorenz" && argc == LORENZ_ARGNUM)
     {
-        double a  = std::stod(argv[7]);
-        double b  = std::stod(argv[8]);
-        double r  = std::stod(argv[9]);
-        double x0 = std::stod(argv[10]);
-        double y0 = std::stod(argv[11]);
-        double z0 = std::stod(argv[12]);
+        double a  = std::stod(argv[9]);
+        double b  = std::stod(argv[10]);
+        double r  = std::stod(argv[11]);
+        double x0 = std::stod(argv[12]);
+        double y0 = std::stod(argv[13]);
+        double z0 = std::stod(argv[14]);
 
         Lorenz lorenz(a, b, r);
         State start_state(3, t0);
@@ -117,12 +132,12 @@ int main(int argc, char* argv[])
     }
     else if (system_type == "rossler" && argc == ROSSLER_ARGNUM)
     {
-        double a  = std::stod(argv[7]);
-        double b  = std::stod(argv[8]);
-        double c  = std::stod(argv[9]);
-        double x0 = std::stod(argv[10]);
-        double y0 = std::stod(argv[11]);
-        double z0 = std::stod(argv[12]);
+        double a  = std::stod(argv[9]);
+        double b  = std::stod(argv[10]);
+        double c  = std::stod(argv[11]);
+        double x0 = std::stod(argv[12]);
+        double y0 = std::stod(argv[13]);
+        double z0 = std::stod(argv[14]);
 
         Rossler rossler(a, b, c);
         State start_state(3, t0);

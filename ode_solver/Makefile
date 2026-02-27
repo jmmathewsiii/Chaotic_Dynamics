@@ -48,7 +48,7 @@ cleanall: clean
 
 # Run the program (example - modify arguments as needed)
 run: all | $(OUT_DIR)
-	./$(TARGET) lorenz single adaptive 0. 0.1 1000 16. 4. 45. -13. -12. 52. 
+	./$(TARGET) pendulum single fixed section .0 0.01 300000 1.256637061 1.2 0.1 0.1 5. 0.25 9.80665 1.1 0. 
 
 # Phony targets
 .PHONY: all clean cleanall run

@@ -65,7 +65,47 @@ void Plotter::plot_2D_state_space(std::vector<State> &states, std::string &name)
     f << "set title '" << name <<"' font ', 14'\n";
     f << "set tics font ', 14'\n"; 
     f << "unset key\n";
-    f << "plot '" << data_filename << "' w l lw 2\n";
+    f << "plot '" << data_filename << "' w l lw 1 \n";
+
+    f.close();
+
+    std::cout << "Command file written: " << cmd_filename << "\n";
+}
+
+void Plotter::plot_2D_state_space_section(std::vector<State> &states, std::string &name) {
+
+    int size = states.size();
+
+    std::string data_filename = name + ".plt";
+    std::string data_filepath = "/output/" + data_filename;
+
+    std::ofstream f;
+    f.open(data_filename.c_str(), std::ios::out);
+
+    double theta = 0;
+    double prev_theta = 0;
+    int half_size = (int) size * 0.5;
+
+    for (int i = half_size; i < size; ++i) {
+        theta = states[i].x[0];
+        theta = std::fmod(theta, 2 * PI);
+        if (std::abs(theta - prev_theta) > 6.) {f << "\n";}
+        f << theta << " " << states[i].x[1] << "\n";
+        prev_theta = theta;
+    }
+
+    f.close();
+
+    std::cout << "Data file written: " << data_filename << "\n";
+    
+    std::string cmd_filename = name;
+    std::string cmd_filepath = "/output/" + cmd_filename;
+
+    f.open(cmd_filename.c_str(), std::ios::out);
+    f << "set title '" << name <<"' font ', 14'\n";
+    f << "set tics font ', 14'\n"; 
+    f << "unset key\n";
+    f << "plot '" << data_filename << "' w p ps 0.75 pt 22 \n";
 
     f.close();
 
