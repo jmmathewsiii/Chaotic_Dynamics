@@ -43,4 +43,16 @@ class Rossler {
         State operator()(const State &s, double t) const;
 };
 
+class LorenzVariation {
+    private:
+        double a;
+        double b;
+        double r;
+    public:
+        LorenzVariation();
+        LorenzVariation(double, double, double);
+
+        State operator()(const State &s, double t) const;
+};
+
 #endif // !SYSTEMS_H

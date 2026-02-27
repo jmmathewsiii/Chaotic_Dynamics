@@ -54,6 +54,6 @@ double State::twoNorm() const
     return result;
 }
 
-int State::getSize() const {
+std::size_t State::getSize() const {
     return x.size();
 }

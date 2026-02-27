@@ -130,6 +130,80 @@ int main(int argc, char* argv[])
             cerr << "Invalid plot type: " << plot_type << "\n";
         }
     }
+    else if (system_type == "variation" && argc == LORENZ_ARGNUM){
+        double a  = std::stod(argv[9]);
+        double b  = std::stod(argv[10]);
+        double r  = std::stod(argv[11]);
+        double x0 = std::stod(argv[12]);
+        double y0 = std::stod(argv[13]);
+        double z0 = std::stod(argv[14]);
+
+        LorenzVariation lorenz(a, b, r);
+        State start_state(12, t0);
+        start_state.x[0] = x0;
+        start_state.x[1] = y0;
+        start_state.x[2] = z0;
+
+        start_state.x[3] = 1.;
+        start_state.x[4] = 0.;
+        start_state.x[5] = 0.;
+        
+        start_state.x[6] = 0.;
+        start_state.x[7] = 1.;
+        start_state.x[8] = 0.;
+
+        start_state.x[9] = 0.;
+        start_state.x[10] = 0.;
+        start_state.x[11] = 1.;
+
+        if (plot_type == "single")
+        {
+            VS history;
+
+            if (adaptive == "fixed") {
+                history = run_one_sim<LorenzVariation>(start_state, t0, dt, n_iter, lorenz);
+                plot_name = "Nonadaptive-Lorenz-State-Space-Plot";
+                State final = history.back();
+
+                double delta_x_sum = 0.;
+                double delta_y_sum = 0.;
+                double delta_z_sum = 0.;
+
+                for (int i = 0; i < 3; ++i) {
+                   cout << "State[" << i << "] = " << final.x[i] << "\n";
+                }
+                cout << "\nMatrix of Variations:\n";
+                for (int i = 3; i < 6; ++i) 
+                {
+                    delta_x_sum += final.x[i];
+                    delta_y_sum += final.x[i+3];
+                    delta_z_sum += final.x[i+6];
+                    cout << final.x[i] << "     " << final.x[i+3] << "     " << final.x[i+6] << "\n";
+                }
+                cout << "\nx variation sum = " << delta_x_sum << "\ny variation sum = " << delta_y_sum
+                     << "\nz variation sum = " << delta_z_sum << "\n";
+            }
+            else if (adaptive == "adaptive") {
+                history = run_one_sim_adaptive<LorenzVariation>(start_state, t0, dt, n_iter, lorenz);
+                plot_name = "Adaptive-Lorenz-State-Space-Plot";
+            }
+            else {
+                cerr << "Invalid adaptiveness parameter: " << adaptive << "\n";
+            }
+            Plotter::plot_3D_state_space(history, plot_name);
+        }
+        else if (plot_type == "portrait")
+        {
+            VS start_states = getStartStates("lorenz", t0);
+            start_states.push_back(start_state);
+            plot_name = "Lorenz-State-Space-Portrait";
+            VSS histories = run_multiple_sims<LorenzVariation>(start_states, t0, dt, n_iter, lorenz);
+            Plotter::plot_multiple_3D_state_spaces(histories, plot_name);
+        }
+        else {
+            cerr << "Invalid plot type: " << plot_type << "\n";
+        }
+    }
     else if (system_type == "rossler" && argc == ROSSLER_ARGNUM)
     {
         double a  = std::stod(argv[9]);

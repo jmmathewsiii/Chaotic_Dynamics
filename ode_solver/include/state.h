@@ -17,7 +17,7 @@ class State {
     double infNorm() const;
     double twoNorm() const;
 
-    int getSize() const;
+    std::size_t getSize() const;
 };
 
 #endif // STATE_H

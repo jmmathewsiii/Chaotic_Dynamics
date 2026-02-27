@@ -1,0 +1,3 @@
+set title 'Nonadaptive-Lorenz-State-Space-Plot'
+unset key
+splot 'Nonadaptive-Lorenz-State-Space-Plot.plt' w l
