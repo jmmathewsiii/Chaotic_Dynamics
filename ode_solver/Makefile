@@ -48,7 +48,7 @@ cleanall: clean
 
 # Run the program (example - modify arguments as needed)
 run: all | $(OUT_DIR)
-	./$(TARGET) variation single fixed full .0 0.001 100 0. 16. 4. 45. 0. 1. 2.
+	./$(TARGET) lorenz single fixed full .0 0.001 200000 0. 16. 4. 45. 0. -1. 20.
 
 # Phony targets
 .PHONY: all clean cleanall run

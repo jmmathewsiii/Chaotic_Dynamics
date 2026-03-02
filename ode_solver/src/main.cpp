@@ -175,9 +175,9 @@ int main(int argc, char* argv[])
                 cout << "\nMatrix of Variations:\n";
                 for (int i = 3; i < 6; ++i) 
                 {
-                    delta_x_sum += final.x[i];
-                    delta_y_sum += final.x[i+3];
-                    delta_z_sum += final.x[i+6];
+                    delta_x_sum += std::abs(final.x[i]);
+                    delta_y_sum += std::abs(final.x[i+3]);
+                    delta_z_sum += std::abs(final.x[i+6]);
                     cout << final.x[i] << "     " << final.x[i+3] << "     " << final.x[i+6] << "\n";
                 }
                 cout << "\nx variation sum = " << delta_x_sum << "\ny variation sum = " << delta_y_sum

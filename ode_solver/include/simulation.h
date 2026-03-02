@@ -15,7 +15,7 @@ VS run_one_sim(State &start_state, double t0, double dt, int n_iter, SystemType 
 
     double t_new = t0 + dt;
 
-    for (int i = 1; i < n_iter; ++i) {
+    for (int i = 1; i <= n_iter; ++i) {
 
         State new_state(STATE_SIZE, t_new);
         new_state = rk4_step(curr_state, dt, system);
