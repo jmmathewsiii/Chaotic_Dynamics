@@ -1,0 +1,4 @@
+set title 'test_plot' font ', 14'
+set tics font ', 14'
+unset key
+plot 'test_plot.plt' w p ps 0.5 pt 22

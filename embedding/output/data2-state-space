@@ -1,0 +1,4 @@
+set title 'data2-state-space' font ', 14'
+set tics font ', 14'
+unset key
+plot 'data2-state-space.plt' w p ps 0.5 pt 22

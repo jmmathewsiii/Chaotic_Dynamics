@@ -7,6 +7,7 @@ LDFLAGS = -fsanitize=address
 SRC_DIR = src
 INC_DIR = include
 OBJ_DIR = obj
+INP_DIR = input
 BIN_DIR = bin
 OUT_DIR = output
 
@@ -15,7 +16,7 @@ SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 # Target executable
-TARGET = $(BIN_DIR)/simulation
+TARGET = $(BIN_DIR)/ts_analysis
 
 # Default target
 all: $(TARGET)
@@ -48,14 +49,12 @@ cleanall: clean
 
 # Run the program (example - modify arguments as needed)
 run: all | $(OUT_DIR)
-	./$(TARGET) lorenz single fixed full .0 0.001 200000 0. 16. 4. 45. 0. -1. 20.
+	./$(TARGET) data3 embed 2 0.5 7 0 3 6
 
 # Phony targets
-.PHONY: all clean cleanall run $(OUT_DIR)
+.PHONY: all clean cleanall run
 
 # Dependencies (headers)
-$(OBJ_DIR)/main.o: $(INC_DIR)/state.h $(INC_DIR)/rk4.h $(INC_DIR)/systems.h $(INC_DIR)/plotter.h $(INC_DIR)/config.h
-$(OBJ_DIR)/state.o: $(INC_DIR)/state.h
-$(OBJ_DIR)/rk4.o: $(INC_DIR)/rk4.h $(INC_DIR)/state.h
-$(OBJ_DIR)/systems.o: $(INC_DIR)/systems.h $(INC_DIR)/state.h $(INC_DIR)/config.h
-$(OBJ_DIR)/plotter.o: $(INC_DIR)/plotter.h $(INC_DIR)/state.h
+$(OBJ_DIR)/main.o: $(INC_DIR)/utils.h $(INC_DIR)/state.h $(INC_DIR)/embed.h
+$(OBJ_DIR)/utils.o: $(INC_DIR)/utils.h
+$(OBJ_DIR)/embed.o: $(INC_DIR)/embed.h

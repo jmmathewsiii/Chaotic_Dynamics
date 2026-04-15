@@ -1,0 +1,4 @@
+set title 'data3-embed' font ', 14'
+set tics font ', 14'
+unset key
+splot 'data3-embed.plt' w p ps 0.5 pt 22
